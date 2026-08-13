@@ -1,0 +1,38 @@
+/* 根样式，在整个页面中生效 */
+:root { 
+    --bg-color: #f5f5f5; /* 背景色 */
+    --card-bg: #ffffff; /* 卡片背景色 */
+    --text-main: #333333; /* 主要文字颜色 */
+    --text-secondary: #666666; /* 次要文字颜色 */
+    --accent: #0066cc; /* 强调颜色 */
+    --gap: 1rem; /* 间距 */
+    --radius: 12px; /* 圆角半径 */
+}
+
+/* 深色主题 */
+.dark {
+    --bg-color: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --text-main: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent: #4a90e2;
+}
+
+    <style>.nav-card-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-card-header img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+    }
+
+    .nav-card-header h3,
+    .nav-card-header p {
+        margin: 0;
+    }
+
+    </style>
