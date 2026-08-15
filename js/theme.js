@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let avatarTimer;
 
     function updateAvatar(isDark, animate = false) {
+        if (!profileAvatar) return;   // 无头像的子页面（如 status.html）直接跳过
+
         const nextSrc = isDark
             ? profileAvatar.dataset.darkSrc
             : profileAvatar.dataset.lightSrc;

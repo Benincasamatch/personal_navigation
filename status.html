@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>服务状态 - 个人导航页</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 主题切换脚本 -->
+    <script>
+      (function () {
+        var s = localStorage.getItem("theme");
+        var dark = s !== "light" && (s === "dark" || matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) document.documentElement.classList.add("dark");
+      })();
+    </script>
+</head>
+<body>
+    <button id="theme-toggle" type="button" aria-label="主题：自动，点击切换" data-theme-mode="system">
+        自动
+    </button>
+    <script src="js/theme.js"></script>
+
+    <main>
+        <section>
+            <h2 class="section-title">服务状态</h2>
+            <p class="page-lead">
+                以下内容来自 UptimeRobot 状态页，展示各项自建服务的可用性与响应情况。
+            </p>
+            <div class="status-frame">
+                <iframe src="https://stats.uptimerobot.com/xjE8Ah9f5p"
+                    title="UptimeRobot 服务状态页"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+            </div>
+            <div class="card-actions">
+                <a href="https://stats.uptimerobot.com/xjE8Ah9f5p" target="_blank" rel="noopener noreferrer"
+                    title="在新标签页打开状态页">在新标签页打开</a>
+                <a href="index.html" title="返回导航首页">返回首页</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Benincasamatch. All rights reserved.</p>
+    </footer>
+</body>
+</html>
