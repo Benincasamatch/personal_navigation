@@ -212,6 +212,11 @@ section {
     border-bottom-color: var(--accent-hover);
 }
 
+.card-note {
+    color: var(--text-secondary);
+    font-size: .85rem;
+}
+
 /* ============ 页脚 ============ */
 
 footer {
