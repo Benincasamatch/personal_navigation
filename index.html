@@ -5,17 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>个人导航页</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- 主题切换脚本 -->
+    <script>
+      (function () {
+        var s = localStorage.getItem("theme");
+        var dark = s !== "light" && (s === "dark" || matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) document.documentElement.classList.add("dark");
+      })();
+    </script>
 </head>
 <body>
-    <button id="theme-toggle" type="button" aria-label="切换深色模式">
-        深色模式
+    <button id="theme-toggle" type="button" aria-label="主题：自动，点击切换" data-theme-mode="system">
+        自动
     </button>
     <script src="js/theme.js"></script>
     <header>
         <!-- 个人信息 -->
-        <img id="profile-avatar" src="assets/headimg/blue.png"
+        <img id="profile-avatar"
             data-light-src="assets/headimg/blue.png" data-dark-src="assets/headimg/dark.png"
             alt="头像" width="88" height="88">
+        <script>
+            // 以 <html> 上的 .dark 为唯一判定源，首屏同步定稿，避免加载错误头像
+            (function () {
+                var img = document.getElementById("profile-avatar");
+                img.src = document.documentElement.classList.contains("dark")
+                    ? img.dataset.darkSrc
+                    : img.dataset.lightSrc;
+            })();
+        </script>
         <h2>Benincasamatch</h2>
         <p>欢迎来到我的个人导航！</p>
         <p>我是 Benincasamatch，正在学习网络开发。</p>
