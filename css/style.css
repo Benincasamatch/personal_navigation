@@ -68,6 +68,63 @@ a {
     text-decoration: none;
 }
 
+/* ============ 主题切换按钮 ============ */
+
+#theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-main);
+    box-shadow: var(--shadow-sm);
+    font: inherit;
+    font-size: .875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease,
+        color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+#theme-toggle::before {
+    content: "☾";
+    width: 1.25rem;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--accent);
+    transition: color .2s ease, transform .3s ease;
+}
+
+.dark #theme-toggle::before {
+    content: "☀";
+    transform: rotate(180deg);
+}
+
+#theme-toggle:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+#theme-toggle:active {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(0) scale(.97);
+}
+
+#theme-toggle:focus-visible {
+    outline: 3px solid var(--accent-soft);
+    outline-offset: 3px;
+    border-color: var(--accent);
+}
+
 /* ============ 头部 ============ */
 
 header {
@@ -82,6 +139,14 @@ header img {
     border: 3px solid var(--card-bg);
     box-shadow: var(--shadow-sm);
     object-fit: cover;
+    transition: opacity .18s ease, transform .18s ease,
+        filter .18s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+#profile-avatar.avatar-changing {
+    opacity: 0;
+    filter: blur(3px);
+    transform: scale(.88) rotate(-8deg);
 }
 
 header h2 {
@@ -257,5 +322,14 @@ footer p {
 @media (min-width: 1024px) {
     .card-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
     }
 }
