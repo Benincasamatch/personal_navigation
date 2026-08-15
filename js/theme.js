@@ -1,23 +1,28 @@
-/*theme - toggle*/
-const toggleButton = document.querySelector("#theme-toggle");
-const root = document.documentElement;
+/* ============ 主题切换 ============ */
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleButton = document.querySelector("#theme-toggle");
+    const profileAvatar = document.querySelector("#profile-avatar");
+    const root = document.documentElement;
 
-toggleButton.addEventListener("click", () => {
-    root.classList.toggle("dark");
-});
+    function updateAvatar(isDark) {
+        profileAvatar.src = isDark
+            ? profileAvatar.dataset.darkSrc
+            : profileAvatar.dataset.lightSrc;
+    }
 
-/* loaclstorage - theme */
-const toggleButton = document.querySelector("#theme-toggle");
-const root = document.documentElement;
+    /* LocalStorage */
+    const savedTheme = localStorage.getItem("theme");
+    const isDark = savedTheme === "dark";
 
-const savedTheme = localStorage.getItem("theme");
+    /* 加载主题与对应头像 */
+    root.classList.toggle("dark", isDark);
+    updateAvatar(isDark);
 
-if (savedTheme === "dark") {
-    root.classList.add("dark");
-}
+    /* 切换主题与对应头像 */
+    toggleButton.addEventListener("click", () => {
+        const nextIsDark = root.classList.toggle("dark");
 
-toggleButton.addEventListener("click", () => {
-    const isDark = root.classList.toggle("dark");
-
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+        updateAvatar(nextIsDark);
+        localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+    });
 });

@@ -13,7 +13,9 @@
     <script src="js/theme.js"></script>
     <header>
         <!-- 个人信息 -->
-        <img src="assets/headimg/blue.png" alt="头像" width="88" height="88">
+        <img id="profile-avatar" src="assets/headimg/blue.png"
+            data-light-src="assets/headimg/blue.png" data-dark-src="assets/headimg/dark.png"
+            alt="头像" width="88" height="88">
         <h2>Benincasamatch</h2>
         <p>欢迎来到我的个人导航！</p>
         <p>我是 Benincasamatch，正在学习网络开发。</p>
@@ -28,13 +30,15 @@
                     <img src="assets/websiteimg/github.svg" alt="GitHub">
                     <h3>GitHub</h3>
                     <p>我的 GitHub 主页，包含我的项目和代码。</p>
-                    <a href="https://github.com/Benincasamatch" class="card-link" target="_blank" title="跳转到GitHub">访问 GitHub</a>
+                    <a href="https://github.com/Benincasamatch" class="card-link" target="_blank" rel="noopener noreferrer"
+                        title="跳转到GitHub">访问 GitHub</a>
                 </div>
                 <div class="card">
                     <img src="assets/websiteimg/qq.svg" alt="QQ">
                     <h3>联系方式</h3>
                     <p>通过以下方式与我联系。</p>
-                    <a href="https://github.com/Benincasamatch" class="card-link" target="_blank">点击添加 QQ 好友</a>
+                    <a href="https://github.com/Benincasamatch" class="card-link"
+                        target="_blank" rel="noopener noreferrer">点击添加 QQ 好友</a>
                 </div>
             </div>
         </section>
@@ -50,7 +54,8 @@
                         <p>个人项目总仓库，包含导航页、脚本、配置与自动化内容。</p>
                     </div>
                     <div class="card-actions">
-                        <a href="https://github.com/Benincasamatch/nether" target="_blank" title="查看Nether项目">查看项目</a>
+                        <a href="https://github.com/Benincasamatch/nether" target="_blank" rel="noopener noreferrer"
+                            title="查看Nether项目">查看项目</a>
                     </div>
                 </div>
                 <div class="nav-card">
@@ -60,7 +65,8 @@
                         <p>基于静态网页构建的个人入口站点，用来汇总常用链接和自建服务。</p>
                     </div>
                     <div class="card-actions">
-                        <a href="https://github.com/Benincasamatch/nether/tree/main/projects/personal_navigation" target="_blank" title="查看导航页源码">查看源码</a>
+                        <a href="https://github.com/Benincasamatch/nether/tree/main/projects/personal_navigation"
+                            target="_blank" rel="noopener noreferrer" title="查看导航页源码">查看源码</a>
                     </div>
                 </div>
                 <div class="nav-card">
@@ -70,7 +76,8 @@
                         <p>更多的代码作品与项目持续更新，欢迎访问我的 GitHub 主页。</p>
                     </div>
                     <div class="card-actions">
-                        <a href="https://github.com/Benincasamatch" target="_blank" title="访问GitHub主页">访问主页</a>
+                        <a href="https://github.com/Benincasamatch" target="_blank" rel="noopener noreferrer"
+                            title="访问GitHub主页">访问主页</a>
                     </div>
                 </div>
             </div>
@@ -87,8 +94,8 @@
                         <p>使用 openlist 搭建的网盘。</p>
                     </div>
                     <div class="card-actions">
-                        <a href="https://openlist.example.invalid/" target="_blank" title="通过cloudflare">公网跳转</a>
-                        <a href="#" target="_blank" title="通过内网跳转">内网跳转</a>
+                        <a href="https://openlist.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer"
+                            title="通过受保护的公网入口访问">公网跳转</a>
                     </div>
                 </div>
                 <div class="nav-card">
@@ -98,8 +105,8 @@
                         <p>使用 jellyfin 搭建的视频网站。</p>
                     </div>
                     <div class="card-actions">
-                        <a href="https://jellyfin.benincasamatch.dpdns.org/" target="_blank" title="通过cloudflare">公网跳转</a>
-                        <a href="#" target="_blank" title="通过内网跳转">内网跳转</a>
+                        <a href="https://jellyfin.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer"
+                            title="通过受保护的公网入口访问">公网跳转</a>
                     </div>
                 </div>
                 <div class="nav-card">
@@ -109,8 +116,7 @@
                         <p>多种 LLM 兼容的 API 代理服务。</p>
                     </div>
                     <div class="card-actions">
-                        <a href="https://management.example.invalid/" target="_blank" title="通过cloudflare">公网跳转</a>
-                        <a href="#" target="_blank" title="通过内网跳转">内网跳转</a>
+                        <span class="card-note">管理入口已隐藏，请通过 VPN 或 Cloudflare Access 访问。</span>
                     </div>
                 </div>
             </div>
@@ -121,5 +127,5 @@
         <!-- 版权信息 -->
         <p>&copy; 2026 Benincasamatch. All rights reserved.</p>
     </footer>
-</body>
+    </body>
 </html>
