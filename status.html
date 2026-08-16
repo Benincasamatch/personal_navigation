@@ -24,18 +24,14 @@
         <section>
             <h2 class="section-title">服务状态</h2>
             <p class="page-lead">
-                以下内容来自 UptimeRobot 状态页，展示各项自建服务的可用性与响应情况。
+                各项自建服务的可用性与响应情况来自 UptimeRobot，展示最近 30 天的在线状态。
             </p>
-            <div class="status-frame">
-                <iframe src="https://stats.uptimerobot.com/xjE8Ah9f5p"
-                    title="UptimeRobot 服务状态页"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+            <div id="status-root">
+                <div class="status-loading">正在加载状态，请稍候……</div>
             </div>
-            <div class="card-actions">
+            <div class="status-actions">
                 <a href="https://stats.uptimerobot.com/xjE8Ah9f5p" target="_blank" rel="noopener noreferrer"
-                    title="在新标签页打开状态页">在新标签页打开</a>
+                    title="在 UptimeRobot 官方状态页查看">官方状态页</a>
                 <a href="index.html" title="返回导航首页">返回首页</a>
             </div>
         </section>
@@ -44,5 +40,69 @@
     <footer>
         <p>&copy; 2026 Benincasamatch. All rights reserved.</p>
     </footer>
+
+    <script>
+      (function () {
+        var root = document.getElementById("status-root");
+
+        var LABEL = { up: "正常", seemdown: "部分故障", down: "故障", pause: "暂停监控" };
+
+        function esc(s) {
+          return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+          });
+        }
+
+        fetch("/api/status")
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (!data || !data.ok) {
+              root.innerHTML = '<div class="status-error">' + esc(data && data.error ? data.error : "加载失败") + "</div>";
+              return;
+            }
+
+            var html = '<div class="status-legend">' +
+              '<span><i class="legend-color day up"></i>正常</span>' +
+              '<span><i class="legend-color day seemdown"></i>部分故障</span>' +
+              '<span><i class="legend-color day down"></i>故障</span>' +
+              '<span><i class="legend-color day nodata"></i>无数据</span>' +
+              "</div>";
+
+            data.groups.forEach(function (group) {
+              html += '<div class="status-group"><div class="status-group-title">' + esc(group.name) + "</div>";
+              group.monitors.forEach(function (m) {
+                var badge = LABEL[m.status] || "未知";
+                var days = m.daily.map(function (d) {
+                  var cls, title = esc(d.date) + " ";
+                  if (d.uptime === null) { cls = "nodata"; title += "无数据"; }
+                  else if (d.uptime >= 100) { cls = "up"; title += "可用率 100%"; }
+                  else if (d.uptime >= 95) { cls = "seemdown"; title += "可用率 " + d.uptime + "%"; }
+                  else { cls = "down"; title += "可用率 " + d.uptime + "%"; }
+                  return '<i class="day ' + cls + '" title="' + title + '"></i>';
+                }).join("");
+
+                var main = m.url
+                  ? '<a href="' + esc(m.url) + '" target="_blank" rel="noopener noreferrer">' + esc(m.name) + "</a>"
+                  : esc(m.name);
+
+                html += '<div class="status-item">' +
+                  '<span class="status-item-name">' + main + "</span>" +
+                  '<div class="status-days-wrap">' +
+                    '<div class="status-days">' + days + "</div>" +
+                    '<span class="status-days-label">最近 30 天</span>' +
+                  "</div>" +
+                  '<span class="status-badge ' + esc(m.status) + '"><i class="dot"></i>' + esc(badge) + "</span>" +
+                "</div>";
+              });
+              html += "</div>";
+            });
+
+            root.innerHTML = html;
+          })
+          .catch(function () {
+            root.innerHTML = '<div class="status-error">加载失败，请稍后重试。</div>';
+          });
+      })();
+    </script>
 </body>
 </html>

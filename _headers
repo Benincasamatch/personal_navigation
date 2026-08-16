@@ -8,10 +8,11 @@
   Cross-Origin-Resource-Policy: same-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
-# 状态页需要嵌入 UptimeRobot 状态页，单独放行 frame-src
+# status.html 通过前端 JS 调用同源的 Pages Function（/api/status）拉取监控数据，
+# 因此需放行 connect-src 'self'（仅允许同源请求，不开放任意站点）。
 /status.html
   ! Content-Security-Policy
-  Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'none'; frame-src https://stats.uptimerobot.com; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; manifest-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; manifest-src 'self'; upgrade-insecure-requests
 
 /assets/*
   Cache-Control: public, max-age=604800
