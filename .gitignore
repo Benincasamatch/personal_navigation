@@ -28,3 +28,7 @@ yarn-error.log*
 
 # UptimeRobot-Page runtime cache（运行时生成，不入库）
 cache_uptimepage.php
+
+# PHP 版状态页（Cloudflare Pages 不支持 PHP，改用 functions/ 代理方案；
+# 如需在支持 PHP 的主机部署可恢复，但请勿把含密钥的版本提交到公开仓库）
+/index.php
