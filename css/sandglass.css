@@ -1,0 +1,135 @@
+/* Stencil's local typefaces and token names are shared with the reference. */
+@font-face { font-family: Geist; src: url(../assets/fonts/Geist.woff2) format("woff2"); font-display: swap; font-style: normal; font-weight: 400 600; }
+@font-face { font-family: "Instrument Sans"; src: url(../assets/fonts/InstrumentSans.woff2) format("woff2"); font-display: swap; font-style: normal; font-weight: 400 700; }
+@font-face { font-family: "Ioskeley Mono Term"; src: url(../assets/fonts/IoskeleyMonoTerm-Regular.woff2) format("woff2"); font-display: swap; font-style: normal; font-weight: 400; }
+
+:root {
+  --st-bg: #000000;
+  --st-surface-1: #0a0a0a;
+  --st-app-a: #44cfff;
+  --st-app-b: #3b6cff;
+  --st-sky: #38bdf8;
+  --st-violet: #c084fc;
+  --st-plum: #460f55;
+  --st-silver: #fafafc;
+  --st-text-primary: #ededed;
+  --st-text-secondary: #a1a1a1;
+  --st-text-tertiary: #757575;
+  --st-border-subtle: rgba(255, 255, 255, .06);
+  --st-border-default: rgba(255, 255, 255, .14);
+  --st-accent: var(--st-app-a);
+  --st-accent-hover: color-mix(in oklab, var(--st-app-a) 78%, var(--st-silver));
+  --st-font-sans: Geist, system-ui, sans-serif;
+  --st-font-brand: "Instrument Sans", system-ui, sans-serif;
+  --st-font-mono: "Ioskeley Mono Term", ui-monospace, monospace;
+  --st-edge-x: max(44px, 4.5vw);
+  --st-edge-y: max(40px, 6.5vh);
+  --outlet-x: calc(100% - 48px);
+  --outlet-y: 52vh;
+  --st-space-1: 4px;
+  --st-space-2: 8px;
+  --st-space-3: 12px;
+  --st-space-4: 16px;
+  --st-space-6: 24px;
+  --st-space-8: 32px;
+  --st-control-size: 36px;
+  --st-ease-out: cubic-bezier(.16, 1, .3, 1);
+  --st-motion-fast: .14s;
+  --st-dither-cyan: conic-gradient(rgba(68, 207, 255, .25) 90deg, transparent 90deg 180deg, rgba(68, 207, 255, .25) 180deg 270deg, transparent 270deg);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body { background: var(--st-bg); color: var(--st-text-primary); font-family: var(--st-font-sans); -webkit-font-smoothing: antialiased; }
+button { font: inherit; }
+button, kbd { border-radius: 0; }
+button:focus-visible { outline: 2px solid var(--st-accent); outline-offset: 4px; }
+::selection { color: var(--st-bg); background: var(--st-accent); }
+
+.landing-stage { position: fixed; inset: 0; overflow: hidden; isolation: isolate; background: var(--st-bg); }
+.st-poster { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
+.st-poster-layer { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+
+.study-header { position: absolute; top: var(--st-edge-y); left: var(--st-edge-x); }
+.eyebrow, .landing-meta, .st-button { font-family: var(--st-font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: .08em; }
+.eyebrow { margin: 0; font-size: 10px; line-height: 1.5; color: var(--st-text-secondary); }
+.separator { color: var(--st-text-tertiary); margin-inline: var(--st-space-1); }
+
+/* ---- 服务星标：位置与动效参照 stencil-clone 的 .landing-star ---- */
+.landing-star { position: absolute; display: flex; align-items: center; gap: 8px; left: calc(var(--star-x) - 22px); top: calc(var(--star-y) - 22px); padding: 12px; color: var(--star-rim); font-family: var(--st-font-mono); font-size: 11px; line-height: 1; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.landing-star--drive { --star-delay: 0s; --star-mass: var(--st-violet); --star-rim: var(--st-sky); --star-x: 22%; --star-y: 30%; }
+.landing-star--media { --star-delay: -1.1s; --star-mass: var(--st-sky); --star-rim: var(--st-violet); --star-x: 62%; --star-y: 52%; }
+.landing-star--status { --star-delay: -2.2s; --star-mass: var(--st-silver); --star-rim: var(--st-sky); --star-x: 40%; --star-y: 74%; }
+.landing-star-icon { display: grid; flex: none; width: 21px; height: 21px; }
+.landing-star-glyph { display: block; width: 100%; height: 100%; }
+.landing-star-core { fill: var(--st-silver); }
+.landing-star-arm, .landing-star-spark { fill: var(--star-rim); }
+.landing-star-tip, .landing-star-flare { fill: var(--star-mass); }
+.landing-star-tip { animation: landing-star-twinkle 3.2s step-end var(--star-delay) infinite; }
+.landing-star-spark, .landing-star-flare { opacity: 0; transition: opacity 0s .32s; }
+.landing-star-label { clip-path: inset(0); transition: clip-path .18s steps(var(--star-chars), end); }
+.landing-intro .landing-star-label { clip-path: inset(0 100% 0 0); animation: label-reveal .32s steps(var(--star-chars), end) .2s both; }
+:is(.landing-intro .landing-star, .landing-star:hover, .landing-star:focus-visible) :is(.landing-star-spark, .landing-star-flare) { opacity: 1; transition: none; }
+:is(.landing-intro .landing-star, .landing-star:hover, .landing-star:focus-visible) .landing-star-tip { animation: none; }
+.landing-star:hover { color: var(--st-accent-hover); }
+.landing-star:focus-visible { outline: 2px solid var(--star-rim); outline-offset: -2px; }
+@keyframes landing-star-twinkle { 0% { opacity: 1; } 62% { opacity: 0; } 78% { opacity: 1; } }
+
+.landing-foot { position: absolute; left: var(--st-edge-x); bottom: var(--st-edge-y); display: flex; align-items: center; gap: clamp(32px, 3vw, 48px); }
+.landing-lockup { display: flex; align-items: center; gap: .42em; font-size: clamp(38px, 3.2vw, 52px); }
+.sand-mark { display: block; flex: none; width: .64em; height: .94em; }
+.mark-shell { fill: var(--st-silver); }
+.mark-sand { fill: var(--st-sky); transition: fill var(--st-motion-fast) ease; }
+.landing-brand:hover .mark-sand { fill: var(--st-silver); }
+.landing-word { margin: 0; font-family: var(--st-font-brand); font-size: 1em; font-weight: 600; letter-spacing: -.025em; line-height: 1.05; color: var(--st-silver); }
+.landing-copy { margin: var(--st-space-3) 0 0; padding-left: 3px; color: var(--st-text-secondary); font-family: var(--st-font-mono); font-size: 10px; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; }
+.landing-actions { display: flex; align-items: center; gap: var(--st-space-2); }
+.st-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: var(--st-control-size); padding: 0 var(--st-space-4); border: 1px solid var(--st-border-default); background: transparent; color: var(--st-text-secondary); font-size: 11px; line-height: 1; text-decoration: none; transition: border-color var(--st-motion-fast) ease, color var(--st-motion-fast) ease; }
+.st-button:hover { border-color: var(--st-accent); color: var(--st-accent-hover); background: var(--st-dither-cyan); background-size: 2px 2px; }
+
+.landing-meta { position: absolute; right: var(--st-edge-x); bottom: var(--st-edge-y); display: flex; flex-direction: column; align-items: flex-end; gap: var(--st-space-2); color: var(--st-text-tertiary); font-size: 9px; line-height: 1.4; }
+.flow-arrow { display: inline-block; margin-left: var(--st-space-1); color: var(--st-text-secondary); }
+.script-notice { position: absolute; top: 45%; left: var(--st-edge-x); font-size: 13px; color: var(--st-text-secondary); }
+
+/* Short, stepped reveals; the particle simulation itself stays continuous. */
+.landing-intro .eyebrow { animation: label-reveal .28s steps(12, end) both; }
+.landing-intro .landing-copy { animation: label-reveal .24s steps(8, end) .14s both; }
+@keyframes label-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+
+@media (max-width: 900px) {
+  .landing-meta { font-size: 8px; }
+  .landing-foot { gap: var(--st-space-6); }
+}
+@media (max-width: 640px) {
+  :root { --st-edge-x: 24px; --st-edge-y: max(28px, 4vh); }
+  .eyebrow { max-width: 220px; font-size: 9px; }
+  .landing-star { font-size: 10px; padding: 10px; left: calc(var(--star-x) - 18px); top: calc(var(--star-y) - 18px); }
+  .landing-star-icon { width: 18px; height: 18px; }
+  .landing-star--drive { --star-x: 15%; --star-y: 22%; }
+  .landing-star--media { --star-x: 50%; --star-y: 42%; }
+  .landing-star--status { --star-x: 28%; --star-y: 58%; }
+  .landing-foot { flex-direction: column; align-items: flex-start; gap: var(--st-space-6); bottom: calc(var(--st-edge-y) + clamp(90px, 14vh, 130px)); }
+  .landing-lockup { font-size: clamp(32px, 8.8vw, 40px); }
+  .landing-copy { margin-top: var(--st-space-2); font-size: 9px; }
+  .landing-meta { left: var(--st-edge-x); right: auto; bottom: calc(var(--st-edge-y) + clamp(68px, 9vh, 90px)); align-items: flex-start; font-size: 8px; }
+  .landing-meta > :last-child { display: none; }
+}
+@media (max-height: 500px) and (min-width: 641px) {
+  :root { --st-edge-y: 24px; }
+  .landing-lockup { font-size: 34px; }
+  .landing-copy { font-size: 9px; margin-top: var(--st-space-2); }
+  .landing-star--drive { --star-y: 26%; }
+  .landing-star--status { --star-y: 64%; }
+}
+@media (hover: none) {
+  .landing-star-label { clip-path: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* 窄屏：版权行只留署名，避免压到沙漏轮廓 */
+@media (max-width: 640px) {
+  .copy-tail { display: none; }
+}

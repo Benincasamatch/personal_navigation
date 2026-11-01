@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>个人导航页</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 主题切换脚本 -->
+    <script>
+      (function () {
+        var s = localStorage.getItem("theme");
+        var dark = s !== "light" && (s === "dark" || matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) document.documentElement.classList.add("dark");
+      })();
+    </script>
+</head>
+<body>
+    <a id="home-link" href="index.html" title="返回沙漏首页">&larr; 首页</a>
+    <button id="theme-toggle" type="button" aria-label="主题：自动，点击切换" data-theme-mode="system">
+        自动
+    </button>
+    <script src="js/theme.js"></script>
+    <header>
+        <!-- 个人信息 -->
+        <img id="profile-avatar"
+            data-light-src="assets/headimg/blue.png" data-dark-src="assets/headimg/dark.png"
+            alt="头像" width="88" height="88">
+        <script>
+            // 以 <html> 上的 .dark 为唯一判定源，首屏同步定稿，避免加载错误头像
+            (function () {
+                var img = document.getElementById("profile-avatar");
+                img.src = document.documentElement.classList.contains("dark")
+                    ? img.dataset.darkSrc
+                    : img.dataset.lightSrc;
+            })();
+        </script>
+        <h2>Benincasamatch</h2>
+        <p>欢迎来到我的个人导航！</p>
+        <p>我是 Benincasamatch，正在学习网络开发。</p>
+    </header>
+
+    <main>
+        <section>
+            <!-- 关于 -->
+            <h2 class="section-title">关于</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <img src="assets/websiteimg/github.svg" alt="GitHub">
+                    <h3>GitHub</h3>
+                    <p>我的 GitHub 主页，包含我的项目和代码。</p>
+                    <a href="https://github.com/Benincasamatch" class="card-link" target="_blank" rel="noopener noreferrer"
+                        title="跳转到GitHub">访问 GitHub</a>
+                </div>
+                <div class="card">
+                    <img src="assets/websiteimg/github.svg" alt="GitHub">
+                    <h3>联系方式</h3>
+                    <p>通过 GitHub 与我联系。</p>
+                    <a href="https://github.com/Benincasamatch" class="card-link" target="_blank"
+                        rel="noopener noreferrer">访问 GitHub</a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <!-- 项目 -->
+            <h2 class="section-title">项目</h2>
+            <div class="card-grid">
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <img src="assets/websiteimg/github.svg" alt="Nether">
+                        <h3>Nether</h3>
+                        <p>个人项目总仓库，包含导航页、脚本、配置与自动化内容。</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="https://github.com/Benincasamatch/nether" target="_blank" rel="noopener noreferrer"
+                            title="查看Nether项目">查看项目</a>
+                    </div>
+                </div>
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <img src="assets/websiteimg/github.svg" alt="个人导航页">
+                        <h3>个人导航页</h3>
+                        <p>基于静态网页构建的个人入口站点，用来汇总常用链接和自建服务。</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="https://github.com/Benincasamatch/nether/tree/main/projects/personal_navigation"
+                            target="_blank" rel="noopener noreferrer" title="查看导航页源码">查看源码</a>
+                    </div>
+                </div>
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <img src="assets/websiteimg/github.svg" alt="GitHub 主页">
+                        <h3>GitHub 主页</h3>
+                        <p>更多的代码作品与项目持续更新，欢迎访问我的 GitHub 主页。</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="https://github.com/Benincasamatch" target="_blank" rel="noopener noreferrer"
+                            title="访问GitHub主页">访问主页</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <!-- 服务 -->
+            <h2 class="section-title">服务</h2>
+            <div class="card-grid">
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <img src="assets/websiteimg/openlist.svg" alt="openlist">
+                        <h3>自建网盘</h3>
+                        <p>使用 openlist 搭建的网盘。</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="https://openlist.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer"
+                            title="通过受保护的公网入口访问">公网跳转</a>
+                    </div>
+                </div>
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <img src="assets/websiteimg/jellyfin.png" alt="jellyfin">
+                        <h3>自建视频网站</h3>
+                        <p>使用 jellyfin 搭建的视频网站。</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="https://jellyfin.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer"
+                            title="通过受保护的公网入口访问">公网跳转</a>
+                    </div>
+                </div>
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <img src="assets/websiteimg/CLIProxyAPI.png" alt="CLI Proxy API">
+                        <h3>CLI Proxy API</h3>
+                        <p>多种 LLM 兼容的 API 代理服务。</p>
+                    </div>
+                    <div class="card-actions">
+                        <span class="card-note">管理入口已隐藏，请通过 VPN 或 Cloudflare Access 访问。</span>
+                    </div>
+                </div>
+                <div class="nav-card">
+                    <div class="nav-card-header">
+                        <img src="assets/websiteimg/github.svg" alt="服务状态">
+                        <h3>服务状态</h3>
+                        <p>基于 UptimeRobot 的可用性监控，查看各项自建服务的在线状态。</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="status.html" title="查看服务状态页">查看状态</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- 版权信息 -->
+        <p>&copy; 2026 Benincasamatch. All rights reserved.</p>
+    </footer>
+    </body>
+</html>

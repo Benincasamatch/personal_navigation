@@ -1,158 +1,88 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>个人导航页</title>
-    <link rel="stylesheet" href="css/style.css">
-    <!-- 主题切换脚本 -->
-    <script>
-      (function () {
-        var s = localStorage.getItem("theme");
-        var dark = s !== "light" && (s === "dark" || matchMedia("(prefers-color-scheme: dark)").matches);
-        if (dark) document.documentElement.classList.add("dark");
-      })();
-    </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Benincasamatch 的个人入口：一场关于时间的粒子实验，三颗星标指向自建服务，底部是全部链接入口。" />
+  <title>个人导航 — Benincasamatch</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%2344cfff' d='M3 1h10v2H3zm1 3h2v2H4zm6 0h2v2h-2zM6 6h4v4H6zm-2 4h2v2H4zm6 0h2v2h-2zM3 13h10v2H3z'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/sandglass.css" />
+  <script src="js/sandglass.js" defer></script>
 </head>
 <body>
-    <button id="theme-toggle" type="button" aria-label="主题：自动，点击切换" data-theme-mode="system">
-        自动
-    </button>
-    <script src="js/theme.js"></script>
-    <header>
-        <!-- 个人信息 -->
-        <img id="profile-avatar"
-            data-light-src="assets/headimg/blue.png" data-dark-src="assets/headimg/dark.png"
-            alt="头像" width="88" height="88">
-        <script>
-            // 以 <html> 上的 .dark 为唯一判定源，首屏同步定稿，避免加载错误头像
-            (function () {
-                var img = document.getElementById("profile-avatar");
-                img.src = document.documentElement.classList.contains("dark")
-                    ? img.dataset.darkSrc
-                    : img.dataset.lightSrc;
-            })();
-        </script>
-        <h2>Benincasamatch</h2>
-        <p>欢迎来到我的个人导航！</p>
-        <p>我是 Benincasamatch，正在学习网络开发。</p>
+  <main class="landing-stage landing-intro" id="stage">
+    <div class="st-poster" role="img" aria-label="页面右侧的一体式巨大沙漏，顶部、右侧与底部部分被裁切。连续的粒子玻璃轮廓贯穿上下腔与细颈，银白色沙粒垂直落入铺到画面底端的沙堆。">
+      <canvas class="st-poster-layer" id="sand-fallback" aria-hidden="true"></canvas>
+      <canvas class="st-poster-layer" id="sand-gl" aria-hidden="true" hidden></canvas>
+    </div>
+
+    <header class="study-header">
+      <p class="eyebrow">Benincasamatch <span class="separator">/</span> Personal index</p>
     </header>
 
-    <main>
-        <section>
-            <!-- 关于 -->
-            <h2 class="section-title">关于</h2>
-            <div class="card-grid">
-                <div class="card">
-                    <img src="assets/websiteimg/github.svg" alt="GitHub">
-                    <h3>GitHub</h3>
-                    <p>我的 GitHub 主页，包含我的项目和代码。</p>
-                    <a href="https://github.com/Benincasamatch" class="card-link" target="_blank" rel="noopener noreferrer"
-                        title="跳转到GitHub">访问 GitHub</a>
-                </div>
-                <div class="card">
-                    <img src="assets/websiteimg/github.svg" alt="GitHub">
-                    <h3>联系方式</h3>
-                    <p>通过 GitHub 与我联系。</p>
-                    <a href="https://github.com/Benincasamatch" class="card-link" target="_blank"
-                        rel="noopener noreferrer">访问 GitHub</a>
-                </div>
-            </div>
-        </section>
+    <!-- 三个自建服务：位置与动效参照 stencil-clone 的 landing-star，按画面分散排布 -->
+    <nav class="landing-stars" aria-label="自建服务">
+      <a class="landing-star landing-star--drive" href="https://openlist.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer" style="--star-chars:6" title="自建网盘 · openlist，通过受保护的公网入口访问">
+        <span class="landing-star-icon">
+          <svg class="landing-star-glyph" aria-hidden="true" shape-rendering="crispEdges" viewBox="0 0 7 7">
+            <path class="landing-star-flare" d="M3 0h1v1H3zM0 3h1v1H0zM6 3h1v1H6zM3 6h1v1H3z" />
+            <path class="landing-star-tip" d="M3 1h1v1H3zM1 3h1v1H1zM5 3h1v1H5zM3 5h1v1H3z" />
+            <path class="landing-star-spark" d="M1 1h1v1H1zM5 1h1v1H5zM1 5h1v1H1zM5 5h1v1H5z" />
+            <path class="landing-star-arm" d="M3 2h1v1H3zM2 3h1v1H2zM4 3h1v1H4zM3 4h1v1H3z" />
+            <path class="landing-star-core" d="M3 3h1v1H3z" />
+          </svg>
+        </span>
+        <span class="landing-star-label">自建网盘 &#8599;</span>
+      </a>
+      <a class="landing-star landing-star--media" href="https://jellyfin.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer" style="--star-chars:6" title="自建视频 · jellyfin，通过受保护的公网入口访问">
+        <span class="landing-star-icon">
+          <svg class="landing-star-glyph" aria-hidden="true" shape-rendering="crispEdges" viewBox="0 0 7 7">
+            <path class="landing-star-flare" d="M3 0h1v1H3zM0 3h1v1H0zM6 3h1v1H6zM3 6h1v1H3z" />
+            <path class="landing-star-tip" d="M3 1h1v1H3zM1 3h1v1H1zM5 3h1v1H5zM3 5h1v1H3z" />
+            <path class="landing-star-spark" d="M1 1h1v1H1zM5 1h1v1H5zM1 5h1v1H1zM5 5h1v1H5z" />
+            <path class="landing-star-arm" d="M3 2h1v1H3zM2 3h1v1H2zM4 3h1v1H4zM3 4h1v1H3z" />
+            <path class="landing-star-core" d="M3 3h1v1H3z" />
+          </svg>
+        </span>
+        <span class="landing-star-label">自建视频 &#8599;</span>
+      </a>
+      <a class="landing-star landing-star--status" href="status.html" style="--star-chars:6" title="服务状态 · 查看各项自建服务的可用性">
+        <span class="landing-star-icon">
+          <svg class="landing-star-glyph" aria-hidden="true" shape-rendering="crispEdges" viewBox="0 0 7 7">
+            <path class="landing-star-flare" d="M3 0h1v1H3zM0 3h1v1H0zM6 3h1v1H6zM3 6h1v1H3z" />
+            <path class="landing-star-tip" d="M3 1h1v1H3zM1 3h1v1H1zM5 3h1v1H5zM3 5h1v1H3z" />
+            <path class="landing-star-spark" d="M1 1h1v1H1zM5 1h1v1H5zM1 5h1v1H1zM5 5h1v1H5z" />
+            <path class="landing-star-arm" d="M3 2h1v1H3zM2 3h1v1H2zM4 3h1v1H4zM3 4h1v1H3z" />
+            <path class="landing-star-core" d="M3 3h1v1H3z" />
+          </svg>
+        </span>
+        <span class="landing-star-label">服务状态 &#8599;</span>
+      </a>
+    </nav>
 
-        <section>
-            <!-- 项目 -->
-            <h2 class="section-title">项目</h2>
-            <div class="card-grid">
-                <div class="nav-card">
-                    <div class="nav-card-header">
-                        <img src="assets/websiteimg/github.svg" alt="Nether">
-                        <h3>Nether</h3>
-                        <p>个人项目总仓库，包含导航页、脚本、配置与自动化内容。</p>
-                    </div>
-                    <div class="card-actions">
-                        <a href="https://github.com/Benincasamatch/nether" target="_blank" rel="noopener noreferrer"
-                            title="查看Nether项目">查看项目</a>
-                    </div>
-                </div>
-                <div class="nav-card">
-                    <div class="nav-card-header">
-                        <img src="assets/websiteimg/github.svg" alt="个人导航页">
-                        <h3>个人导航页</h3>
-                        <p>基于静态网页构建的个人入口站点，用来汇总常用链接和自建服务。</p>
-                    </div>
-                    <div class="card-actions">
-                        <a href="https://github.com/Benincasamatch/nether/tree/main/projects/personal_navigation"
-                            target="_blank" rel="noopener noreferrer" title="查看导航页源码">查看源码</a>
-                    </div>
-                </div>
-                <div class="nav-card">
-                    <div class="nav-card-header">
-                        <img src="assets/websiteimg/github.svg" alt="GitHub 主页">
-                        <h3>GitHub 主页</h3>
-                        <p>更多的代码作品与项目持续更新，欢迎访问我的 GitHub 主页。</p>
-                    </div>
-                    <div class="card-actions">
-                        <a href="https://github.com/Benincasamatch" target="_blank" rel="noopener noreferrer"
-                            title="访问GitHub主页">访问主页</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <section class="landing-foot" aria-labelledby="page-title">
+      <div class="landing-brand">
+        <div class="landing-lockup">
+          <svg class="sand-mark" aria-hidden="true" viewBox="0 0 22 32" shape-rendering="crispEdges">
+            <path class="mark-shell" d="M2 0h18v2H2zM3 4h2v5H3zm14 0h2v5h-2zM5 9h2v3H5zm10 0h2v3h-2zM7 12h2v3H7zm6 0h2v3h-2zM9 15h4v2H9zm-2 2h2v3H7zm6 0h2v3h-2zM5 20h2v3H5zm10 0h2v3h-2zM3 23h2v5H3zm14 0h2v5h-2zM2 30h18v2H2z" />
+            <path class="mark-sand" d="M6 5h10v2H6zM7 7h8v3H7zm2 3h4v4H9zm1 9h2v3h-2zm-3 4h8v2H7zm-2 2h12v3H5z" />
+          </svg>
+          <h1 class="landing-word" id="page-title">个人导航</h1>
+        </div>
+        <p class="landing-copy">© 2026 Benincasamatch<span class="copy-tail"> <span class="separator">/</span> All rights reserved</span></p>
+      </div>
 
-        <section>
-            <!-- 服务 -->
-            <h2 class="section-title">服务</h2>
-            <div class="card-grid">
-                <div class="nav-card">
-                    <div class="nav-card-header">
-                        <img src="assets/websiteimg/openlist.svg" alt="openlist">
-                        <h3>自建网盘</h3>
-                        <p>使用 openlist 搭建的网盘。</p>
-                    </div>
-                    <div class="card-actions">
-                        <a href="https://openlist.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer"
-                            title="通过受保护的公网入口访问">公网跳转</a>
-                    </div>
-                </div>
-                <div class="nav-card">
-                    <div class="nav-card-header">
-                        <img src="assets/websiteimg/jellyfin.png" alt="jellyfin">
-                        <h3>自建视频网站</h3>
-                        <p>使用 jellyfin 搭建的视频网站。</p>
-                    </div>
-                    <div class="card-actions">
-                        <a href="https://jellyfin.benincasamatch.dpdns.org/" target="_blank" rel="noopener noreferrer"
-                            title="通过受保护的公网入口访问">公网跳转</a>
-                    </div>
-                </div>
-                <div class="nav-card">
-                    <div class="nav-card-header">
-                        <img src="assets/websiteimg/CLIProxyAPI.png" alt="CLI Proxy API">
-                        <h3>CLI Proxy API</h3>
-                        <p>多种 LLM 兼容的 API 代理服务。</p>
-                    </div>
-                    <div class="card-actions">
-                        <span class="card-note">管理入口已隐藏，请通过 VPN 或 Cloudflare Access 访问。</span>
-                    </div>
-                </div>
-                <div class="nav-card">
-                    <div class="nav-card-header">
-                        <img src="assets/websiteimg/github.svg" alt="服务状态">
-                        <h3>服务状态</h3>
-                        <p>基于 UptimeRobot 的可用性监控，查看各项自建服务的在线状态。</p>
-                    </div>
-                    <div class="card-actions">
-                        <a href="status.html" title="查看服务状态页">查看状态</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+      <div class="landing-actions">
+        <a class="st-button" href="nav.html">全部链接与项目 <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
 
-    <footer>
-        <!-- 版权信息 -->
-        <p>&copy; 2026 Benincasamatch. All rights reserved.</p>
+    <footer class="landing-meta">
+      <span>Stencil-inspired</span>
+      <span>Continuous flow <span class="flow-arrow" aria-hidden="true">↓</span></span>
     </footer>
-    </body>
+    <noscript><p class="script-notice">请启用 JavaScript 查看沙漏粒子效果；导航入口与链接不受影响。</p></noscript>
+  </main>
+</body>
 </html>
