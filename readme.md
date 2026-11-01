@@ -1,6 +1,6 @@
 # 个人导航页（Personal Navigation）
 
-部署在 Cloudflare Pages 上的个人入口站：首页是一场关于时间的粒子实验（沙漏），
+部署在 Cloudflare Workers 上的个人入口站：首页是一场关于时间的粒子实验（沙漏），
 导航页汇总自建服务与项目。
 
 第一版（MVP）已完成并上线；首页已迁移为沙漏视觉页（见下方「首页与导航页」）。
@@ -14,7 +14,7 @@
 - 头像随主题切换并带淡出过渡
 - 服务状态页：展示各项自建服务最近 30 天可用率
 - PC / 移动端响应式布局
-- 推送到 GitHub 后由 Cloudflare Pages 自动部署
+- 推送到 GitHub 后由 Cloudflare Workers Builds 自动部署
 
 ## 技术方案
 
@@ -22,31 +22,33 @@
 | --- | --- |
 | 页面 | 原生 HTML + CSS，无前端框架、无构建步骤 |
 | 交互 | 原生 JavaScript（主题切换、状态页渲染） |
-| 后端 | Cloudflare Pages Functions（仅 `/api/status` 一个端点） |
+| 后端 | Cloudflare Worker（仅 `/api/status` 一个路由） |
 | 数据源 | UptimeRobot API v2 |
-| 托管 | Cloudflare Pages + 自定义域名 |
+| 托管 | Cloudflare Workers 静态资源 + 自定义域名 |
 
 ## 目录结构
 
 ```text
 personal_navigation/
-├── index.html              # 首页：粒子沙漏 + 导航快捷入口
-├── nav.html                # 导航页（原首页）：关于 / 项目 / 服务卡片
-├── status.html             # 服务状态页
-├── _headers                # Cloudflare Pages 响应头（CSP / HSTS / 缓存）
-├── css/
-│   ├── sandglass.css       # 首页样式（Stencil 风格 + 入口面板）
-│   └── style.css           # 导航页 / 状态页样式
-├── js/
-│   ├── sandglass.js        # 首页粒子沙漏（WebGL2，Canvas 2D 降级）
-│   └── theme.js            # 主题切换
-├── functions/
-│   └── api/
-│       └── status.js       # Pages Function：代理 UptimeRobot API
-├── assets/
-│   ├── fonts/              # 首页字体（Geist / Instrument Sans / Ioskeley Mono）
-│   ├── headimg/            # 头像
-│   └── websiteimg/         # 站点图标
+├── public/                 # 静态资源根目录，原样发布到站点根
+│   ├── index.html          # 首页：粒子沙漏 + 导航快捷入口
+│   ├── nav.html            # 导航页（原首页）：关于 / 项目 / 服务卡片
+│   ├── status.html         # 服务状态页
+│   ├── _headers            # 响应头（CSP / HSTS / 缓存）
+│   ├── css/
+│   │   ├── sandglass.css   # 首页样式（Stencil 风格 + 入口面板）
+│   │   └── style.css       # 导航页 / 状态页样式
+│   ├── js/
+│   │   ├── sandglass.js    # 首页粒子沙漏（WebGL2，Canvas 2D 降级）
+│   │   └── theme.js        # 主题切换
+│   └── assets/
+│       ├── fonts/          # 首页字体（Geist / Instrument Sans / Ioskeley Mono）
+│       ├── headimg/        # 头像
+│       └── websiteimg/     # 站点图标
+├── src/
+│   ├── index.js            # Worker 入口：/ 与 /api/* 路由
+│   └── status.js           # /api/status：代理 UptimeRobot API
+├── wrangler.jsonc          # Worker 配置（assets + main）
 ├── docs/                   # 开发文档
 └── readme.md
 ```
@@ -72,15 +74,15 @@ personal_navigation/
 
 ## 服务状态页
 
-状态页不直接在前端调用 UptimeRobot，而是经过一层 Pages Function 代理：
+状态页不直接在前端调用 UptimeRobot，而是经过一层 Worker 代理：
 
 ```text
-status.html ──fetch('/api/status')──> functions/api/status.js ──> UptimeRobot API
+status.html ──fetch('/api/status')──> src/status.js（Worker）──> UptimeRobot API
 ```
 
 这样做的原因：
 
-- API 密钥只存在于 Pages 的环境变量中，不进入前端源码与 Git 仓库
+- API 密钥只存在于 Worker 的环境变量中，不进入前端源码与 Git 仓库
 - UptimeRobot 官方状态页返回 `X-Frame-Options: DENY`，无法用 iframe 嵌入
 - 便于对返回结构做裁剪，错误信息统一脱敏后再返回
 
@@ -110,7 +112,7 @@ Function 会请求最近 30 天（含当天）的 `custom_uptime_ranges`，按 U
 
 ### 必需的环境变量
 
-在 Cloudflare Pages 项目的 **Settings → Environment variables** 中添加：
+在 Cloudflare Workers 服务的 **Settings → Variables and Secrets** 中添加：
 
 | 变量名 | 说明 |
 | --- | --- |
@@ -122,21 +124,22 @@ Function 会请求最近 30 天（含当天）的 `custom_uptime_ranges`，按 U
 
 ## 本地预览
 
-纯静态部分用任意静态服务器即可（`status.html` 会因为拿不到 `/api/status` 而显示加载失败）：
+用 Wrangler 起本地运行时（静态资源与 Worker 路由一起生效）：
 
 ```powershell
-python -m http.server 8080
+npx wrangler dev --var UptimePageApiSecret=<your-key>
 ```
 
-需要连带 Pages Function 一起跑时使用 Wrangler：
+不带 `--var` 时 `/api/status` 返回 500 并提示缺少密钥，其余页面正常。
+只想看纯静态页面也可以起任意静态服务器，但需指定 `public/` 为根：
 
 ```powershell
-npx wrangler pages dev . --binding UptimePageApiSecret=<your-key>
+python -m http.server 8080 --directory public
 ```
 
 ## 安全说明
 
-[_headers](_headers) 中配置了较严格的响应头：
+[public/_headers](public/_headers) 中配置了较严格的响应头：
 
 - `Content-Security-Policy`：`default-src 'none'`，只放行同源的图片、样式、脚本、字体
 - 仅对 `/status.html` 额外放行 `connect-src 'self'`，用于同源调用 `/api/status`

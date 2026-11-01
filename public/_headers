@@ -8,7 +8,7 @@
   Cross-Origin-Resource-Policy: same-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
-# status.html 通过前端 JS 调用同源的 Pages Function（/api/status）拉取监控数据，
+# status.html 通过前端 JS 调用同源的 Worker 路由（/api/status）拉取监控数据，
 # 因此需放行 connect-src 'self'（仅允许同源请求，不开放任意站点）。
 /status.html
   ! Content-Security-Policy

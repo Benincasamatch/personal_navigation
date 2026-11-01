@@ -1,25 +1,23 @@
 /**
- * Cloudflare Pages Function —— /api/status
+ * Worker 路由 —— GET /api/status
  * 代理 UptimeRobot API，密钥从环境变量 UptimePageApiSecret 读取，
  * 避免把 API 密钥暴露在前端源码中。
  *
  * 返回结构：
  * {
  *   "ok": true,
- *   "title": "Service Status",
  *   "updated": "2026-08-16 12:34",
  *   "groups": [ { "name":"组名", "monitors":[ {...} ] } ]
  * }
  */
-export async function onRequest(context) {
-  const { env } = context;
+export async function handleStatus(env) {
   const secret = env.UptimePageApiSecret || "";
 
   if (!secret) {
     return json(
       {
         ok: false,
-        error: "服务未配置：缺少 UptimePageApiSecret 环境变量（在 Pages 的 Functions 环境变量中添加）。",
+        error: "服务未配置：缺少 UptimePageApiSecret 环境变量（在 Worker 的 Settings → Variables and Secrets 中添加）。",
       },
       500
     );
@@ -28,7 +26,6 @@ export async function onRequest(context) {
   // 计算出最近 30 天（含今天）的日期与时间戳区间
   const dates = [];
   const now = new Date();
-  const todayStr = toYmd(now);
   for (let d = 29; d >= 0; d--) {
     const t = new Date(now);
     t.setDate(t.getDate() - d);
@@ -90,9 +87,7 @@ export async function onRequest(context) {
       return { date: dateStr, uptime };
     });
 
-    const downEvents = (m.logs || []).filter(
-      (l) => l.type === 1
-    ).length;
+    const downEvents = (m.logs || []).filter((l) => l.type === 1).length;
 
     // status: 2=up 8/9=down 0=暂停
     let status = "pause";
@@ -100,14 +95,7 @@ export async function onRequest(context) {
     else if (m.status === 8) status = "seemdown";
     else if (m.status === 9) status = "down";
 
-    return {
-      name,
-      group,
-      status,
-      url: m.url || null,
-      daily,
-      downEvents,
-    };
+    return { name, group, status, url: m.url || null, daily, downEvents };
   });
 
   // 按分组归类，保持原始顺序
